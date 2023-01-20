@@ -6,7 +6,7 @@
 /*   By: tgomes-l <tgomes-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 13:57:36 by tgomes-l          #+#    #+#             */
-/*   Updated: 2023/01/20 15:25:22 by tgomes-l         ###   ########.fr       */
+/*   Updated: 2023/01/20 16:26:27 by tgomes-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 //A static variable is a variable that has been allocated 
 //statically—whose lifetime (or "extent") is the entire run of the program.
+
+/*
+ *Function to read a line of text from a file descriptor into a buffer.
+ *If a newline character is encountered, reading stops and the buffer is returned.
+ * Keep reading until a newline is encountered or the end of the file is reached.
+ */
 static char	*ft_read_line(int fd, char *buffer)
 {
 	char	*temp_buffer;
@@ -39,6 +45,10 @@ static char	*ft_read_line(int fd, char *buffer)
 	return (buffer);
 }
 
+/*
+ * Function to extract a line of text from a buffer
+ *  and return it as a new string.
+ */
 static char	*ft_get_line(char *buffer)
 {
 	char	*line;
@@ -47,12 +57,14 @@ static char	*ft_get_line(char *buffer)
 	size = 0;
 	if (!*buffer)
 		return (0);
+	 // Determine the length of the line in the buffer
 	while (buffer[size] && buffer[size] != '\n')
 		size++;
 	line = (char *)malloc(sizeof(char) * (size + 2));
 	if (!line)
 		return (0);
 	size = 0;
+	 // Copy the line from the buffer to the new string 
 	while (buffer[size] && buffer[size] != '\n')
 	{
 		line[size] = buffer[size];
@@ -67,6 +79,9 @@ static char	*ft_get_line(char *buffer)
 	return (line);
 }
 
+/*
+ * Function to update the buffer by removing the line that was just read.
+ */
 static char	*ft_update_line(char *buffer)
 {
 	int		x;
@@ -75,6 +90,7 @@ static char	*ft_update_line(char *buffer)
 
 	x = 0;
 	j = 0;
+	// Find the index of the newline character
 	while (buffer[x] && buffer[x] != '\n')
 		x++;
 	if (!buffer[x])
@@ -86,6 +102,7 @@ static char	*ft_update_line(char *buffer)
 	if (!new_buffer)
 		return (0);
 	x++;
+	// Copy the remaining characters in the buffer to the new buffer
 	while (buffer[x])
 		new_buffer[j++] = buffer[x++];
 	new_buffer[j] = '\0';
@@ -93,6 +110,9 @@ static char	*ft_update_line(char *buffer)
 	return (new_buffer);
 }
 
+/*
+ * Function to read the next line of text from a file descriptor.
+ */
 char	*get_next_line(int fd)
 {
 	static char	*buffer;
